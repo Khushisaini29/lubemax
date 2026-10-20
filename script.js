@@ -1,0 +1,8 @@
+const menuButton=document.querySelector('.menu-toggle');
+const nav=document.querySelector('.navigation');
+menuButton.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));menuButton.setAttribute('aria-label',open?'Close navigation':'Open navigation')});
+nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');menuButton.setAttribute('aria-expanded','false')}));
+const counters=document.querySelectorAll('[data-count]');
+const countObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;const el=entry.target;const target=Number(el.dataset.count);const duration=1500;const start=performance.now();function tick(now){const progress=Math.min((now-start)/duration,1);const eased=1-Math.pow(1-progress,3);el.textContent=Math.floor(target*eased).toLocaleString('en-IN');if(progress<1)requestAnimationFrame(tick)}requestAnimationFrame(tick);countObserver.unobserve(el)}),{threshold:.35});
+counters.forEach(el=>countObserver.observe(el));
+document.querySelector('#enquiry-form').addEventListener('submit',event=>{event.preventDefault();const form=event.currentTarget;const values=new FormData(form);const name=String(values.get('name')).trim();const phone=String(values.get('phone')).trim();const message=String(values.get('message')).trim();if(!name||!phone||!message)return;const text=`Hello LUBEMAX, my name is ${name}. My phone number is ${phone}. ${message}`;document.querySelector('.form-note').textContent='Opening WhatsApp with your enquiry…';window.open(`https://wa.me/919111555812?text=${encodeURIComponent(text)}`,'_blank','noopener,noreferrer')});
